@@ -10,4 +10,4 @@ This virtual machine template must be builded using Packer.
 - ``cd packer-rockylinux9``
 - ``packer init vmware-iso-rockylinux9.pkr.hcl``
 - ``packer build vmware-iso-rockylinux9.pkr.hcl``
-- 
+ 
