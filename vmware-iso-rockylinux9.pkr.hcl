@@ -1,29 +1,29 @@
-// Description : Creating a virtual machine template under Rocky Linux 9 from ISO file with Packer using VMware Workstation
-// Author : Yoann LAMY <https://github.com/ynlamy/packer-rockylinux9>
-// Licence : GPLv3
+// Creating a virtual machine template under Rocky Linux 9 from ISO file with Packer using VMware Workstation
 
-// Packer : https://www.packer.io/
 
 packer {
-  required_version = ">= 1.7.0"
+  required_version = ">= 1.7.9"
+
   required_plugins {
     vmware = {
-      version = ">= 1.0.0"
+      version = ">= 1.0.6"
       source  = "github.com/hashicorp/vmware"
     }
   }
 }
 
+
+# Variables for easy configuration and customization
 variable "iso" {
   type        = string
-  description = "A URL to the ISO file"
-  default     = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.3-x86_64-minimal.iso"
+  description = "URL to the Rocky Linux 9 ISO"
+  default     = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9-latest-x86_64-minimal.iso"
 }
 
 variable "checksum" {
   type        = string
-  description = "The checksum for the ISO file"
-  default     = "sha256:eef8d26018f4fcc0dc101c468f65cbf588f2184900c556f243802e9698e56729"
+  description = "The checksum of the ISO file"
+  default     = "sha256:eedbdc2875c32c7f00e70fc861edef48587c7cbfd106885af80bdf434543820b"
 }
 
 variable "headless" {
@@ -32,26 +32,27 @@ variable "headless" {
   default     = true
 }
 
-variable "name" {
+variable "vm_name" {
   type        = string
-  description = "This is the name of the new virtual machine"
-  default     = "vm-rockylinux9"
+  description = "Name of the virtual machine template"
+  default     = "rocky9-template"
 }
 
 variable "username" {
   type        = string
-  description = "The username to connect to SSH"
-  default     = "root"
+  description = "SSH username for template creation"
+  default     = "cunha"
 }
 
 variable "password" {
   type        = string
   description = "A plaintext password to authenticate with SSH"
-  default     = "MotDePasse"
+  default     = "jncunha"
 }
 
+
 source "vmware-iso" "rockylinux9" {
-  // Documentation : https://developer.hashicorp.com/packer/integrations/hashicorp/vmware/latest/components/builder/iso
+  // https://developer.hashicorp.com/packer/integrations/hashicorp/vmware/latest/components/builder/iso
 
   // ISO configuration
   iso_url      = var.iso
@@ -59,29 +60,33 @@ source "vmware-iso" "rockylinux9" {
 
   // Driver configuration
   cleanup_remote_cache = false
-  
-  // Hardware configuration
-  vm_name           = var.name
-  vmdk_name         = var.name
-  version           = "21"
-  guest_os_type     = "rockylinux-64"
-  cpus              = 1
-  vmx_data = {
-    "numvcpus" = "2"
-  }
-  memory            = 2048
-  disk_size         = 30720
+
+  // Virtual Machine Configuration
+  vm_name       = var.vm_name
+  vmdk_name     = var.vm_name
+  version       = "21"
+  guest_os_type = "rockylinux-64"
+
+  // Hardware Resources
+  cpus   = 2
+  memory = 4096
+
+  // Disk Configuration
+  disk_size         = 20720
   disk_adapter_type = "scsi"
   disk_type_id      = "1"
-  network           = "nat"
-  sound             = false
-  usb               = false
+
+  // Network and Peripheral Configuration
+  network = "nat"
+
+  sound   = false
+  usb     = false
 
   // Run configuration
   headless = var.headless
 
   // Shutdown configuration
-  shutdown_command = "systemctl poweroff"
+  shutdown_command = "sudo shutdown -P now"
 
   // Http directory configuration
   http_directory = "http"
@@ -101,16 +106,29 @@ source "vmware-iso" "rockylinux9" {
 
   // Export configuration
   format          = "vmx"
-  skip_compaction = false  
+  skip_compaction = false
 }
+
 
 build {
   sources = ["source.vmware-iso.rockylinux9"]
 
   provisioner "shell" {
+    # Scripts to run after base installation
     scripts = [
-      "scripts/provisioning.sh"
+      "scripts/post-install.sh"
     ]
+
+    # Environment variables for the provisioner
+    environment_vars = [
+      "USERNAME=${var.username}"
+    ]
+
   }
 
+  post-processor "compress" {
+    output = "output/rocky9-template.tar.gz"
+  }
+  
 }
+
