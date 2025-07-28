@@ -17,19 +17,19 @@ packer {
 variable "iso" {
   type        = string
   description = "A URL to the ISO file"
-  default     = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.5-x86_64-minimal.iso"
+  default     = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.6-x86_64-minimal.iso"
 }
 
 variable "checksum" {
   type        = string
   description = "The checksum for the ISO file"
-  default     = "sha256:eedbdc2875c32c7f00e70fc861edef48587c7cbfd106885af80bdf434543820b"
+  default     = "sha256:aed9449cf79eb2d1c365f4f2561f923a80451b3e8fdbf595889b4cf0ac6c58b8"
 }
 
 variable "headless" {
   type        = bool
   description = "When this value is set to true, the machine will start without a console"
-  default     = true
+  default     = false
 }
 
 variable "name" {
@@ -59,7 +59,7 @@ source "vmware-iso" "rockylinux9" {
 
   // Driver configuration
   cleanup_remote_cache = false
-  
+
   // Hardware configuration
   vm_name           = var.name
   vmdk_name         = var.name
@@ -101,7 +101,7 @@ source "vmware-iso" "rockylinux9" {
 
   // Export configuration
   format          = "vmx"
-  skip_compaction = false  
+  skip_compaction = false
 }
 
 build {
