@@ -29,7 +29,7 @@ variable "checksum" {
 variable "headless" {
   type        = bool
   description = "When this value is set to true, the machine will start without a console"
-  default     = false
+  default     = true
 }
 
 variable "name" {
