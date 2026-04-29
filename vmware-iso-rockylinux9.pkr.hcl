@@ -2,7 +2,7 @@
 // Author : Yoann LAMY <https://github.com/ynlamy/packer-rockylinux9>
 // Licence : GPLv3
 
-// Packer : https://www.packer.io/
+// Packer : https://developer.hashicorp.com/packer/
 
 packer {
   required_version = ">= 1.7.0"
@@ -17,13 +17,13 @@ packer {
 variable "iso" {
   type        = string
   description = "A URL to the ISO file"
-  default     = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.6-x86_64-minimal.iso"
+  default     = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-minimal.iso"
 }
 
 variable "checksum" {
   type        = string
   description = "The checksum for the ISO file"
-  default     = "sha256:aed9449cf79eb2d1c365f4f2561f923a80451b3e8fdbf595889b4cf0ac6c58b8"
+  default     = "sha256:23a1ac1175d8ccada7195863914ef1237f584ff25f73bd53da410d5fffd882b0"
 }
 
 variable "headless" {
