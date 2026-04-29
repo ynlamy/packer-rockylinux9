@@ -8,7 +8,7 @@ echo "Updating the system..."
 dnf -y -q update &> /dev/null
 
 echo "Installing packages..."
-dnf -y -q install mlocate net-tools unzip wget &> /dev/null
+dnf -y -q install open-vm-tools mlocate net-tools unzip wget &> /dev/null
 
 echo "Deleting the files ks.cfg..."
 rm -f /root/anaconda-ks.cfg /root/original-ks.cfg
