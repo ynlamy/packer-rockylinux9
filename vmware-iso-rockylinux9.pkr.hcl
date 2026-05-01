@@ -51,31 +51,30 @@ variable "password" {
 }
 
 source "vmware-iso" "rockylinux9" {
-  // Documentation : https://developer.hashicorp.com/packer/integrations/hashicorp/vmware/latest/components/builder/iso
+  // Documentation : https://developer.hashicorp.com/packer/integrations/vmware/vmware/latest/components/builder/iso
 
   // ISO configuration
   iso_url      = var.iso
   iso_checksum = var.checksum
 
-  // Driver configuration
-  cleanup_remote_cache = false
-
   // Hardware configuration
-  vm_name           = var.name
-  vmdk_name         = var.name
-  version           = "21"
-  guest_os_type     = "rockylinux-64"
-  cpus              = 1
+  vm_name              = var.name
+  vmdk_name            = var.name
+  firmware             = "bios"
+  version              = 21
+  guest_os_type        = "rockylinux-64"
+  cpus                 = 1
   vmx_data = {
     "numvcpus" = "2"
   }
-  memory            = 2048
-  disk_size         = 30720
-  disk_adapter_type = "scsi"
-  disk_type_id      = "1"
-  network           = "nat"
-  sound             = false
-  usb               = false
+  memory               = 2048
+  disk_size            = 30720
+  disk_adapter_type    = "scsi"
+  disk_type_id         = "1"
+  network              = "nat"
+  network_adapter_type = "e1000"
+  sound                = false
+  usb                  = false
 
   // Run configuration
   headless = var.headless
