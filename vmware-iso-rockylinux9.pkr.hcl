@@ -17,13 +17,13 @@ packer {
 variable "iso" {
   type        = string
   description = "A URL to the ISO file"
-  default     = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-minimal.iso"
+  default     = "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.8-x86_64-minimal.iso"
 }
 
 variable "checksum" {
   type        = string
   description = "The checksum for the ISO file"
-  default     = "sha256:23a1ac1175d8ccada7195863914ef1237f584ff25f73bd53da410d5fffd882b0"
+  default     = "sha256:d338032cd1cdd41c67139f2f71b4c832c8e4a21943106519db9c7137df7a63d4"
 }
 
 variable "headless" {
